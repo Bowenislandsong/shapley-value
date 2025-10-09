@@ -6,9 +6,8 @@ Provides fair allocation solutions for coalition games with multiple calculation
 and performance optimizations.
 """
 
-__version__ = '0.0.4'
+__version__ = '0.0.5'
 __author__ = 'Bowen Song'
-__email__ = 'bowenson@example.com'  # Update with real email if desired
 __license__ = 'MIT'
 
 from .calculator import ShapleyValue
