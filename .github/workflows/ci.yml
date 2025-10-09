@@ -10,8 +10,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.x"]
 
     steps:
     - uses: actions/checkout@v4
@@ -20,6 +21,7 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+        allow-prereleases: true
     
     - name: Install dependencies
       run: |
@@ -36,7 +38,7 @@ jobs:
         flake8 shapley_value tests examples --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics
     
     - name: Type check with mypy (Python 3.9+)
-      if: matrix.python-version != '3.8'
+      if: matrix.python-version != '3.8' && matrix.python-version != '3.x'
       run: |
         mypy shapley_value --ignore-missing-imports --python-version=${{ matrix.python-version }}
     
