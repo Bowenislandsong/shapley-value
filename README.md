@@ -1,4 +1,4 @@
-## Shapley Value Calculator
+## Shapley Value Calculator [![PyPI Downloads](https://static.pepy.tech/personalized-badge/shapley-value?period=total&units=INTERNATIONAL_SYSTEM&left_color=BRIGHTGREEN&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/shapley-value)
 
 ### Overview
 
