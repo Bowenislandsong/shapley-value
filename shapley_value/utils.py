@@ -1,5 +1,7 @@
 
-def combinations(items, r):
+from typing import List, Any, Generator
+
+def combinations(items: List[Any], r: int) -> Generator[List[Any], None, None]:
     if r == 0:
         yield []
     else:

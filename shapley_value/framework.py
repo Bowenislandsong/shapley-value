@@ -1,7 +1,7 @@
 import itertools
 import math
 import pandas as pd
-from typing import Callable, List, Any
+from typing import Callable, List, Any, Generator, Tuple, Dict
 from joblib import Parallel, delayed
 
 class ShapleyValueCalculator:
@@ -26,7 +26,8 @@ class ShapleyValueCalculator:
         Returns:
         - A dictionary where keys are players and values are their corresponding Shapley values.
         """
-        shapley_values = {player: 0 for player in self.players}
+        # Initialize Shapley values dictionary
+        shapley_values: Dict[Any, float] = {player: 0.0 for player in self.players}
         
         if self.num_players < 10:  # Threshold for parallel processing
             results = [self.process_coalition(coalition) for coalition in self.generate_coalitions()]
@@ -39,7 +40,7 @@ class ShapleyValueCalculator:
         
         return shapley_values
 
-    def generate_coalitions(self):
+    def generate_coalitions(self) -> Generator[Tuple[Any, ...], None, None]:
         """
         Generate all possible coalitions.
 
@@ -49,7 +50,7 @@ class ShapleyValueCalculator:
         for i in range(self.num_players + 1):
             yield from itertools.combinations(self.players, i)
 
-    def process_coalition(self, coalition):
+    def process_coalition(self, coalition: Tuple[Any, ...]) -> Dict[Any, float]:
         """
         Process a single coalition.
 
@@ -107,9 +108,9 @@ class ShapleyValueCalculator:
 
 if __name__ == "__main__":
     # Example usage
-    def evaluation_function(coalition):
+    def evaluation_function(coalition: List[Any]) -> float:
         # Example evaluation function: sum of player values
-        return sum(value for value in coalition)
+        return float(sum(value for value in coalition))
 
     players = [10, 20, 30]
     calculator = ShapleyValueCalculator(evaluation_function, players, num_jobs=-1)

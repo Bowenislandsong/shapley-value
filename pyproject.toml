@@ -1,0 +1,120 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shapley-value"
+dynamic = ["version"]
+description = "A comprehensive Python package for calculating Shapley values in cooperative game theory"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Bowen Song", email = "bowenson@example.com"}
+]
+maintainers = [
+    {name = "Bowen Song", email = "bowenson@example.com"}
+]
+keywords = [
+    "shapley", "shapley-value", "game-theory", "cooperative-games",
+    "fair-allocation", "coalition", "marginal-contribution",
+    "economics", "mathematics", "optimization", "machine-learning",
+    "feature-importance", "explainable-ai", "xai"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Education",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Office/Business :: Financial",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+    "Environment :: Web Environment",
+    "Natural Language :: English",
+]
+requires-python = ">=3.7"
+dependencies = [
+    "joblib>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov",
+    "black",
+    "flake8",
+    "mypy",
+    "pre-commit",
+]
+examples = [
+    "pandas>=1.0.0",
+    "numpy>=1.18.0",
+]
+performance = [
+    "pandas>=1.0.0",
+    "psutil",
+]
+all = [
+    "shapley-value[dev,examples,performance]"
+]
+
+[project.urls]
+Homepage = "https://github.com/Bowenislandsong/shapley-value"
+Source = "https://github.com/Bowenislandsong/shapley-value"
+"Bug Reports" = "https://github.com/Bowenislandsong/shapley-value/issues"
+Documentation = "https://github.com/Bowenislandsong/shapley-value#readme"
+Examples = "https://github.com/Bowenislandsong/shapley-value/tree/main/examples"
+Changelog = "https://github.com/Bowenislandsong/shapley-value/blob/main/CHANGELOG.md"
+Author = "https://bowenislandsong.github.io/#/personal"
+
+[tool.setuptools]
+packages = ["shapley_value"]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "shapley_value.__version__"}
+
+[tool.setuptools.package-data]
+shapley_value = ["py.typed"]
+
+[tool.black]
+line-length = 88
+target-version = ['py37', 'py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "--strict-markers --strict-config --verbose"
+
+[tool.mypy]
+python_version = "3.7"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
