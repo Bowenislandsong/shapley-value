@@ -3,6 +3,7 @@
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/shapley-value?period=total&units=INTERNATIONAL_SYSTEM&left_color=BRIGHTGREEN&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/shapley-value)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
+[![Project Page](https://img.shields.io/badge/Project%20Page-Live-blue)](https://bowenislandsong.github.io/shapley-value/)
 
 A comprehensive Python package for calculating Shapley values in cooperative game theory. Shapley values provide a mathematically principled method for fairly distributing payoffs among players based on their marginal contributions to coalitions.
 
