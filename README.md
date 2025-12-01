@@ -250,8 +250,38 @@ python -m pytest tests/
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## 📝 Citation
+
+If you use this package in your research or project, please cite it as:
+
+```bibtex
+@software{song2025shapley,
+  author = {Song, Bowen},
+  title = {Shapley Value Calculator},
+  year = {2025},
+  publisher = {GitHub},
+  url = {https://github.com/Bowenislandsong/shapley-value},
+  version = {0.0.6}
+}
+```
+
+**APA Format:**
+```
+Song, B. (2025). Shapley Value Calculator (Version 0.0.6) [Computer software]. https://github.com/Bowenislandsong/shapley-value
+```
+
+**MLA Format:**
+```
+Song, Bowen. Shapley Value Calculator. Version 0.0.6, GitHub, 2025, github.com/Bowenislandsong/shapley-value.
+```
+
+For more citation formats, see the [CITATION.cff](CITATION.cff) file.
+
 ## 🏷️ Version History
 
+- **0.0.6**: Added citation information for academic use
+- **0.0.5**: CI workflow improvements and Python 3.13 support
+- **0.0.4**: Enhanced parallel processing and performance optimizations
 - **0.0.3**: Enhanced parallel processing and performance optimizations
 - **0.0.2**: Added function-based evaluation and data export features
 - **0.0.1**: Initial release with basic Shapley value calculation

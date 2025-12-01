@@ -6,7 +6,7 @@ Provides fair allocation solutions for coalition games with multiple calculation
 and performance optimizations.
 """
 
-__version__ = '0.0.5'
+__version__ = '0.0.6'
 __author__ = 'Bowen Song'
 __license__ = 'MIT'
 

@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "Shapley Value Calculator"
+abstract: "A comprehensive Python package for calculating Shapley values in cooperative game theory. Provides fair allocation solutions for coalition games with multiple calculation methods and performance optimizations."
+authors:
+  - family-names: Song
+    given-names: Bowen
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+    website: "https://bowenislandsong.github.io/#/personal"
+repository-code: "https://github.com/Bowenislandsong/shapley-value"
+url: "https://bowenislandsong.github.io/shapley-value/"
+license: MIT
+keywords:
+  - shapley-value
+  - game-theory
+  - cooperative-games
+  - fair-allocation
+  - coalition
+  - marginal-contribution
+  - python
+version: 0.0.6
+date-released: 2025-12-01
