@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.6] - 2024-12-01
+
+### Added
+- CITATION.cff file for standardized citation information
+- Citation section in README.md with BibTeX, APA, and MLA formats
+- Citation section in project website (docs/index.html)
+- Support for academic citations in multiple formats
+
+### Changed
+- Version bump from 0.0.5 to 0.0.6
+
+## [0.0.5] - Previous Release
+
 ### Added
 - CI workflow now automatically tests against future Python versions (3.13, 3.x)
 - Support for testing pre-release Python versions to catch compatibility issues early
