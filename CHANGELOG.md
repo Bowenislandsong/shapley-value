@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.0.6] - 2025-12-01
+## [0.0.6] - 2024-12-01
 
 ### Added
 - CITATION.cff file for standardized citation information

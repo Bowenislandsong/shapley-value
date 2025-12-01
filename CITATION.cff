@@ -6,7 +6,6 @@ abstract: "A comprehensive Python package for calculating Shapley values in coop
 authors:
   - family-names: Song
     given-names: Bowen
-    orcid: "https://orcid.org/0000-0000-0000-0000"
     website: "https://bowenislandsong.github.io/#/personal"
 repository-code: "https://github.com/Bowenislandsong/shapley-value"
 url: "https://bowenislandsong.github.io/shapley-value/"
@@ -20,4 +19,4 @@ keywords:
   - marginal-contribution
   - python
 version: 0.0.6
-date-released: 2025-12-01
+date-released: 2024-12-01
