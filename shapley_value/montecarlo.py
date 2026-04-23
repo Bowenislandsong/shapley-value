@@ -211,6 +211,10 @@ class MonteCarloShapleyValue:
         if self._sampled:
             return
 
+        # Cache v([]) once – it is constant for any well-defined game and
+        # would otherwise be called once per permutation (num_samples times).
+        empty_value: float = self.evaluation_function([])
+
         # Generate all permutations first (sequential, reproducible).
         for _ in range(self.num_samples):
             permutation = list(self.players)
@@ -220,24 +224,26 @@ class MonteCarloShapleyValue:
         # Evaluate permutations – in parallel when n_jobs != 1.
         if self.n_jobs == 1:
             self._iteration_estimates = [
-                self._marginal_contributions_for_permutation(p)
+                self._marginal_contributions_for_permutation(p, empty_value)
                 for p in self._permutations
             ]
         else:
             self._iteration_estimates = Parallel(n_jobs=self.n_jobs)(
-                delayed(self._marginal_contributions_for_permutation)(p)
+                delayed(self._marginal_contributions_for_permutation)(p, empty_value)
                 for p in self._permutations
             )
 
         self._sampled = True
 
     def _marginal_contributions_for_permutation(
-        self, permutation: List[Any]
+        self, permutation: List[Any], empty_value: float = 0.0
     ) -> Dict[Any, float]:
         """Compute each player's marginal contribution for one permutation.
 
         Args:
             permutation: An ordered list of all players.
+            empty_value: Pre-computed value of the empty coalition, v([]).
+                Passed in to avoid redundant calls across permutations.
 
         Returns:
             Dictionary mapping each player to their marginal contribution in
@@ -246,11 +252,11 @@ class MonteCarloShapleyValue:
         contributions: Dict[Any, float] = {}
         coalition: List[Any] = []
 
-        previous_value = self.evaluation_function([])
+        previous_value = empty_value
 
         for player in permutation:
             coalition.append(player)
-            current_value = self.evaluation_function(list(coalition))
+            current_value = self.evaluation_function(coalition)
             contributions[player] = current_value - previous_value
             previous_value = current_value
 

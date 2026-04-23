@@ -96,27 +96,74 @@ for player, value in exact.items():
 
 
 # ---------------------------------------------------------------------------
-# 3. Parallel processing
+# 3. Parallel processing – performance benchmark
 # ---------------------------------------------------------------------------
 
 print("\n" + "=" * 60)
-print("3. Parallel Processing with n_jobs")
+print("3. Parallel Processing – Performance Benchmark")
 print("=" * 60)
 
+import os
 import time
 
-for n_jobs in [1, 2, -1]:
-    label = "all cores" if n_jobs == -1 else f"{n_jobs} job(s)"
-    mc_par = MonteCarloShapleyValue(
-        revenue, players=players, num_samples=3000, random_seed=42, n_jobs=n_jobs
-    )
-    t0 = time.time()
-    mc_par.calculate_shapley_values()
-    elapsed = time.time() - t0
-    print(f"  n_jobs={n_jobs:>2} ({label:<10}): {elapsed:.3f}s")
 
-print("\n  Note: parallel speedup is most visible for large num_samples and")
-print("  expensive evaluation functions.")
+def slow_game(coalition):
+    """Simulates an expensive evaluation (e.g. model inference, ~0.1 ms/call)."""
+    if not coalition:
+        return 0.0
+    acc = 0.0
+    for i in range(10_000):
+        acc += i * 1e-10
+    return float(sum(coalition)) + acc
+
+
+cpu_count = os.cpu_count() or 1
+print(f"\n  Machine: {cpu_count} logical CPU(s)")
+print(f"  Game: slow_game (≈0.1 ms per evaluation)")
+
+# ── table header ────────────────────────────────────────────────────────────
+col_w = 14
+header_players  = f"{'Players':>8}"
+header_samples  = f"{'Samples':>8}"
+sep = "-" * (8 + 2 + 8 + 3 * (col_w + 2))
+
+print(f"\n  {header_players}  {header_samples}  "
+      f"{'n_jobs=1':>{col_w}}  {'n_jobs=2':>{col_w}}  {'n_jobs=-1':>{col_w}}")
+print("  " + sep)
+
+bench_configs = [
+    ([1, 2, 3, 4, 5], 100),
+    ([1, 2, 3, 4, 5], 300),
+    (list(range(1, 11)), 200),
+]
+
+for bench_players, bench_samples in bench_configs:
+    row_times = {}
+    for n_jobs in [1, 2, -1]:
+        mc_b = MonteCarloShapleyValue(
+            slow_game, bench_players, num_samples=bench_samples,
+            random_seed=42, n_jobs=n_jobs,
+        )
+        t0 = time.perf_counter()
+        mc_b.calculate_shapley_values()
+        row_times[n_jobs] = time.perf_counter() - t0
+
+    speedup_2    = row_times[1] / row_times[2]    if row_times[2]  > 0 else float("inf")
+    speedup_all  = row_times[1] / row_times[-1]   if row_times[-1] > 0 else float("inf")
+
+    cells = (
+        f"  {len(bench_players):>8}  {bench_samples:>8}"
+        f"  {row_times[1]:>{col_w-3}.3f}s     "
+        f"  {row_times[2]:>{col_w-3}.3f}s {speedup_2:4.1f}×"
+        f"  {row_times[-1]:>{col_w-3}.3f}s {speedup_all:4.1f}×"
+    )
+    print(cells)
+
+print("  " + sep)
+print("  Speedup shown as ×seq (e.g. 2.1× means 2.1× faster than n_jobs=1)")
+print("\n  Tip: for cheap evaluation functions (< 1 µs) the joblib overhead")
+print("  dominates and sequential is faster. For expensive functions")
+print("  (ML models, simulations) set n_jobs=-1 for maximum throughput.")
 
 
 # ---------------------------------------------------------------------------
