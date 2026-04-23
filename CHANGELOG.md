@@ -7,10 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.8] - 2026-04-24
+
 ### Changed
-- `ShapleyValueCalculator`: constructor parameter `num_jobs` renamed to `n_jobs`
-  for consistency with scikit-learn and `MonteCarloShapleyValue`. The instance
-  attribute is now `n_jobs` (previously `num_jobs`).
+- **Breaking:** `ShapleyValueCalculator` constructor parameter `num_jobs` was
+  renamed to `n_jobs` (and the instance attribute is now `n_jobs`) to match
+  scikit-learn and `MonteCarloShapleyValue`.
+
+### Fixed
+- `tests/test_montecarlo_stress.py`: increased work in the expensive evaluation
+  stub so the parallel speedup test is stable on CI (avoids false failures when
+  joblib overhead dominates).
+
+### Added
+- `tests/test_examples.py` now runs `example_montecarlo` with the other examples.
+
+### Documentation
+- README, `examples/README`, and `docs/index.html`: citations to v0.0.8, GitHub
+  Pages copy aligned with optional `n_jobs` parallelism and Monte Carlo features.
 
 ## [0.0.7] - 2026-04-23
 

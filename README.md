@@ -346,19 +346,20 @@ If you use this package in your research or project, please cite it as:
   year = {2024},
   publisher = {GitHub},
   url = {https://github.com/Bowenislandsong/shapley-value},
-  version = {0.0.7}
+  version = {0.0.8}
 }
 ```
 
 **APA Format:**
 ```
-Song, B. (2024). Shapley Value Calculator (Version 0.0.7) [Computer software]. https://github.com/Bowenislandsong/shapley-value
+Song, B. (2024). Shapley Value Calculator (Version 0.0.8) [Computer software]. https://github.com/Bowenislandsong/shapley-value
 ```
 
 For more citation formats see [CITATION.cff](CITATION.cff).
 
 ## 🏷️ Version History
 
+- **0.0.8**: `ShapleyValueCalculator` uses `n_jobs` (sklearn-style); doc and landing-page sync; example runner includes Monte Carlo example
 - **0.0.7**: `MonteCarloShapleyValue` with sklearn-style `n_jobs`; comprehensive stress tests; convergence and raw-data diagnostics
 - **0.0.6**: Citation information for academic use
 - **0.0.5**: CI improvements and Python 3.13 support
