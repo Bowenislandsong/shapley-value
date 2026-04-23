@@ -359,7 +359,7 @@ For more citation formats see [CITATION.cff](CITATION.cff).
 
 ## 🏷️ Version History
 
-- **0.0.7** *(unreleased)*: `MonteCarloShapleyValue` with sklearn-style `n_jobs`; comprehensive stress tests; convergence and raw-data diagnostics
+- **0.0.7**: `MonteCarloShapleyValue` with sklearn-style `n_jobs`; comprehensive stress tests; convergence and raw-data diagnostics
 - **0.0.6**: Citation information for academic use
 - **0.0.5**: CI improvements and Python 3.13 support
 - **0.0.4**: Comprehensive examples, parallel processing, performance optimizations
