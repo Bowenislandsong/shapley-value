@@ -14,11 +14,6 @@ Learn the fundamentals of Shapley value calculation using the `ShapleyCombinatio
 - Step-by-step calculation explanation
 - Business scenario: Three friends planning a venture
 
-**Key Concepts:**
-- Coalition value dictionaries
-- Marginal contributions
-- Fair allocation principles
-
 ```bash
 python examples/example_basic_coalition.py
 ```
@@ -33,12 +28,6 @@ Explore dynamic coalition evaluation using the `ShapleyValueCalculator` class. T
 - Team productivity modeling
 - Marginal contribution analysis
 
-**Key Concepts:**
-- Evaluation functions
-- Synergy effects
-- Performance optimization
-- Raw data export
-
 ```bash
 python examples/example_function_evaluation.py
 ```
@@ -48,17 +37,9 @@ python examples/example_function_evaluation.py
 **Use Case:** Practical business applications
 
 Discover how Shapley values solve real business problems:
-
-#### Scenarios Covered:
 - **Joint Venture Profit Sharing**: Fair distribution among partner companies
 - **Shared Service Cost Allocation**: IT infrastructure cost distribution
 - **Sales Team Commission**: Performance-based team compensation
-
-**Key Concepts:**
-- Profit sharing mechanisms
-- Cost allocation strategies
-- Performance-based compensation
-- Negotiation support tools
 
 ```bash
 python examples/example_business_case.py
@@ -69,17 +50,9 @@ python examples/example_business_case.py
 **Use Case:** ML model interpretation and feature analysis
 
 Apply Shapley values to understand machine learning models:
-
-#### Applications:
 - **House Price Prediction**: Feature importance in regression models
 - **Spam Detection**: Binary classification feature analysis
 - **Feature Interactions**: Understanding complex model relationships
-
-**Key Concepts:**
-- Model interpretability
-- Feature contribution analysis
-- Interaction effects
-- ML debugging techniques
 
 ```bash
 python examples/example_ml_features.py
@@ -87,24 +60,30 @@ python examples/example_ml_features.py
 
 ### 5. **Parallel Processing & Performance** (`example_parallel_processing.py`)
 **Difficulty:** Advanced  
-**Use Case:** Large-scale computations and optimization
+**Use Case:** Large-scale exact computations and optimization
 
-Optimize performance for large games and complex evaluations:
-
-#### Topics Covered:
-- Sequential vs parallel processing comparison
-- Scalability analysis
+Optimise performance for large exact games using `ShapleyValueCalculator`:
+- Sequential vs parallel processing comparison (`num_jobs`)
+- Scalability analysis across player counts
 - Memory efficiency
-- Performance optimization strategies
-
-**Key Concepts:**
-- Computational complexity
-- Parallel processing benefits
-- Memory management
-- Performance profiling
 
 ```bash
 python examples/example_parallel_processing.py
+```
+
+### 6. **Monte Carlo Approximation** (`example_montecarlo.py`)
+**Difficulty:** Advanced  
+**Use Case:** Games with many players (20+) where exact computation is infeasible
+
+Approximate Shapley values for large games using `MonteCarloShapleyValue`:
+- **Basic usage** – any callable evaluation function, any player types
+- **MC vs exact comparison** – error vs sample count for a 3-player game
+- **Parallel processing benchmark** – `n_jobs` timing table with speedup ratios
+- **Convergence diagnostics** – `get_convergence_data()` running estimates
+- **Raw data inspection** – `get_raw_data()` per-permutation marginal contributions
+
+```bash
+python examples/example_montecarlo.py
 ```
 
 ## 🚀 Getting Started
@@ -116,131 +95,99 @@ pip install shapley-value
 
 ### Running Examples
 
-1. **Individual Examples:**
-   ```bash
-   cd /path/to/shapley-value
-   python examples/example_basic_coalition.py
-   ```
+```bash
+# Individual example
+python examples/example_basic_coalition.py
 
-2. **All Examples:**
-   ```bash
-   # Run all examples sequentially
-   for example in examples/example_*.py; do
-       echo "Running $example..."
-       python "$example"
-       echo "---"
-   done
-   ```
+# All examples
+for example in examples/example_*.py; do
+    echo "Running $example..."
+    python "$example"
+    echo "---"
+done
+```
 
 ## 📊 Example Complexity Guide
 
-| Example | Players | Coalitions | Runtime | Complexity |
-|---------|---------|------------|---------|------------|
-| Basic Coalition | 3 | 8 | <1s | Beginner |
-| Function Evaluation | 4 | 16 | <1s | Intermediate |
-| Business Cases | 3-4 | 8-16 | <1s | Intermediate |
-| ML Features | 5 | 32 | <1s | Advanced |
-| Parallel Processing | 8-16 | 256-65,536 | 1-30s | Advanced |
+| Example | Class used | Players | Complexity | Runtime |
+|---------|-----------|---------|------------|---------|
+| Basic Coalition | `ShapleyCombinations` | 3 | Beginner | < 1 s |
+| Function Evaluation | `ShapleyValueCalculator` | 4 | Intermediate | < 1 s |
+| Business Cases | `ShapleyCombinations` | 3–4 | Intermediate | < 1 s |
+| ML Features | `ShapleyValueCalculator` | 5 | Advanced | < 1 s |
+| Parallel Processing | `ShapleyValueCalculator` | 8–16 | Advanced | 1–30 s |
+| Monte Carlo | `MonteCarloShapleyValue` | 4–50 | Advanced | 1–30 s |
 
 ## 🎯 Choosing the Right Example
 
-### For Learning:
-1. Start with **Basic Coalition Values** to understand fundamentals
-2. Progress to **Function-based Evaluation** for dynamic scenarios
-3. Explore **Business Cases** for practical applications
+### By number of players / scale
 
-### For Specific Use Cases:
-- **Business Applications**: Business Cases example
-- **Model Interpretation**: ML Features example  
-- **Performance Optimization**: Parallel Processing example
-- **Custom Scenarios**: Function-based Evaluation example
+| Players | Recommended approach | Example |
+|---------|---------------------|---------|
+| ≤ 10 | `ShapleyCombinations` (exact, pre-defined values) | Basic Coalition |
+| ≤ 20 | `ShapleyValueCalculator` (exact, evaluation function) | Function Evaluation / Parallel |
+| 20+ | `MonteCarloShapleyValue` (approximate, scalable) | Monte Carlo |
 
-### For Different Experience Levels:
-- **Beginners**: Basic Coalition Values
-- **Intermediate Users**: Function Evaluation, Business Cases
-- **Advanced Users**: ML Features, Parallel Processing
+### By use case
 
-## 💡 Tips for Using Examples
+- **Business Applications** → Business Cases example
+- **Model Interpretation** → ML Features example
+- **Large-scale / approximate** → Monte Carlo example
+- **Custom scenarios** → Function-based Evaluation example
 
-### 1. **Modify and Experiment**
-- Change player values and coalition structures
-- Try different evaluation functions
-- Experiment with various business scenarios
+## 🔧 Customisation Guide
 
-### 2. **Performance Considerations**
-- Small examples run instantly
-- Large examples (>15 players) may take several minutes
-- Use parallel processing for better performance
+### Choosing the right class
 
-### 3. **Real-World Adaptation**
-- Use examples as templates for your scenarios
-- Adapt evaluation functions to your specific needs
-- Consider data sources and integration requirements
+```python
+# Exact – when every coalition value is known in advance
+from shapley_value import ShapleyCombinations
 
-### 4. **Understanding Output**
-- Pay attention to Shapley value interpretations
-- Compare different allocation methods
-- Analyze fairness and efficiency properties
+# Exact – when values are computed by a function (≤ ~20 players)
+from shapley_value import ShapleyValueCalculator
 
-## 🔧 Customization Guide
+# Approximate – for 20+ players or expensive evaluation functions
+from shapley_value import MonteCarloShapleyValue
+```
 
-### Creating Your Own Examples
+### Adding parallelism
 
-1. **Choose the Right Class:**
-   ```python
-   # For predefined coalition values
-   from shapley_value import ShapleyCombinations
-   
-   # For dynamic evaluation
-   from shapley_value import ShapleyValueCalculator
-   ```
+Both `ShapleyValueCalculator` and `MonteCarloShapleyValue` follow the
+**scikit-learn `n_jobs` convention**:
 
-2. **Define Your Scenario:**
-   ```python
-   # Example: Custom evaluation function
-   def my_evaluation_function(coalition):
-       # Your custom logic here
-       return coalition_value
-   
-   players = [...]  # Your players
-   calculator = ShapleyValueCalculator(my_evaluation_function, players)
-   shapley_values = calculator.calculate_shapley_values()
-   ```
+```python
+# Sequential (no overhead)
+ShapleyValueCalculator(f, players, num_jobs=1)
+MonteCarloShapleyValue(f, players, n_jobs=1)
 
-3. **Add Performance Optimization:**
-   ```python
-   # For large games
-   calculator = ShapleyValueCalculator(
-       evaluation_function=my_function,
-       players=players,
-       num_jobs=-1  # Use all CPU cores
-   )
-   ```
+# All available CPU cores
+ShapleyValueCalculator(f, players, num_jobs=-1)
+MonteCarloShapleyValue(f, players, n_jobs=-1)
 
-## 📈 Expected Outputs
+# Exactly 4 cores
+ShapleyValueCalculator(f, players, num_jobs=4)
+MonteCarloShapleyValue(f, players, n_jobs=4)
+```
 
-All examples generate detailed output including:
-- **Shapley Values**: Fair allocation for each player
-- **Percentage Distributions**: Relative importance/contribution
-- **Total Values**: Verification of efficiency property
-- **Interpretations**: Business insights and implications
-- **Performance Metrics**: Timing and scalability information (where applicable)
+> **Tip:** For cheap evaluation functions (< 10 µs), `n_jobs=1` avoids
+> process-spawn overhead and is faster. For expensive functions (ML models,
+> simulations), `n_jobs=-1` gives the best throughput.
 
-## 🤝 Contributing Examples
+### Diagnosing Monte Carlo convergence
 
-We welcome contributions of new examples! Please consider:
-- Real-world scenarios and use cases
-- Different industries and applications
-- Novel evaluation functions
-- Performance optimizations
-- Educational content
+```python
+mc = MonteCarloShapleyValue(f, players, num_samples=5000, random_seed=0)
+convergence_df = mc.get_convergence_data()  # shape: (5000, n_players)
+
+# Plot with your favourite library to see when estimates stabilise:
+# convergence_df.plot(title="Running Shapley estimates")
+```
 
 ## 📚 Additional Resources
 
-- [Main README](../README.md) - Package overview and installation
-- [API Documentation](../README.md#api-reference) - Detailed API reference
-- [Shapley Value Theory](https://en.wikipedia.org/wiki/Shapley_value) - Mathematical background
-- [Cooperative Game Theory](https://en.wikipedia.org/wiki/Cooperative_game_theory) - Theoretical foundation
+- [Main README](../README.md) – Package overview, installation, and API reference
+- [Shapley Value Theory](https://en.wikipedia.org/wiki/Shapley_value) – Mathematical background
+- [Cooperative Game Theory](https://en.wikipedia.org/wiki/Cooperative_game_theory) – Theoretical foundation
 
 ---
 
