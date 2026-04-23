@@ -106,7 +106,7 @@ def main():
     calculator = ShapleyValueCalculator(
         evaluation_function=productivity_function,
         players=players,
-        num_jobs=1  # Single-threaded for this example
+        n_jobs=1  # Single-threaded for this example
     )
     
     shapley_values = calculator.calculate_shapley_values()

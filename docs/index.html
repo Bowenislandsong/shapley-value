@@ -274,7 +274,7 @@
                 <div class="feature-card">
                     <div class="feature-icon">⚡</div>
                     <h3>Parallel Processing</h3>
-                    <p>Automatic parallelization for large-scale games with 10+ players.</p>
+                    <p>Optional joblib parallelism with scikit-learn-style n_jobs (set n_jobs=-1 to use all CPU cores).</p>
                 </div>
             </div>
 
@@ -312,7 +312,8 @@ print(shapley_values)
             <h2>✨ Key Features</h2>
             <ul style="line-height: 2; margin: 20px 0; padding-left: 20px;">
                 <li><strong>Multiple Calculation Methods:</strong> Support for both pre-defined coalition values and evaluation functions</li>
-                <li><strong>Parallel Processing:</strong> Automatic parallelization for large games (>10 players)</li>
+                <li><strong>Parallel processing:</strong> n_jobs on ShapleyValueCalculator and MonteCarloShapleyValue (same convention as scikit-learn)</li>
+                <li><strong>Monte Carlo approximation:</strong> Large games via MonteCarloShapleyValue with convergence and raw-data diagnostics</li>
                 <li><strong>Data Export:</strong> Save raw coalition data to CSV for further analysis</li>
                 <li><strong>Type Flexibility:</strong> Works with any hashable player types (strings, numbers, objects)</li>
                 <li><strong>Memory Efficient:</strong> Optimized algorithms for handling large coalition spaces</li>
@@ -422,19 +423,19 @@ print(shapley_values)
   year = {2024},
   publisher = {GitHub},
   url = {https://github.com/Bowenislandsong/shapley-value},
-  version = {0.0.6}
+  version = {0.0.7}
 }</code>
             </div>
 
             <div class="code-block">
                 <code><strong>APA Format:</strong>
-Song, B. (2024). Shapley Value Calculator (Version 0.0.6) [Computer software]. 
+Song, B. (2024). Shapley Value Calculator (Version 0.0.7) [Computer software]. 
 https://github.com/Bowenislandsong/shapley-value</code>
             </div>
 
             <div class="code-block">
                 <code><strong>MLA Format:</strong>
-Song, Bowen. Shapley Value Calculator. Version 0.0.6, GitHub, 2024, 
+Song, Bowen. Shapley Value Calculator. Version 0.0.7, GitHub, 2024, 
 github.com/Bowenislandsong/shapley-value.</code>
             </div>
 

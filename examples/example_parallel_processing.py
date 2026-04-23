@@ -5,9 +5,9 @@ Parallel Processing Example
 This example demonstrates the performance benefits of parallel processing
 when calculating Shapley values for large games (many players).
 
-The ShapleyValueCalculator automatically switches to parallel processing
-for games with more than 10 players, but you can control this behavior
-explicitly using the num_jobs parameter.
+The ShapleyValueCalculator uses joblib for parallelism; you control
+parallelism with the ``n_jobs`` parameter (scikit-learn style: ``1`` =
+sequential, ``-1`` = all CPU cores, ``k`` = exactly ``k`` workers).
 """
 
 import time
@@ -64,24 +64,24 @@ def performance_comparison():
         
         print(f"Total coalitions to evaluate: {total_coalitions:,}")
         
-        # Sequential processing (num_jobs=1)
+        # Sequential processing (n_jobs=1)
         print("Sequential processing...")
         start_time = time.time()
         calculator_seq = ShapleyValueCalculator(
             compute_intensive_function, 
             players, 
-            num_jobs=1
+            n_jobs=1
         )
         shapley_seq = calculator_seq.calculate_shapley_values()
         seq_time = time.time() - start_time
         
-        # Parallel processing (num_jobs=-1, use all cores)
+        # Parallel processing (n_jobs=-1, use all cores)
         print("Parallel processing...")
         start_time = time.time()
         calculator_par = ShapleyValueCalculator(
             compute_intensive_function, 
             players, 
-            num_jobs=-1
+            n_jobs=-1
         )
         shapley_par = calculator_par.calculate_shapley_values()
         par_time = time.time() - start_time
@@ -127,7 +127,7 @@ def scalability_analysis():
         total_coalitions = 2 ** num_players
         
         start_time = time.time()
-        calculator = ShapleyValueCalculator(simple_function, players, num_jobs=-1)
+        calculator = ShapleyValueCalculator(simple_function, players, n_jobs=-1)
         shapley_values = calculator.calculate_shapley_values()
         computation_time = time.time() - start_time
         
@@ -173,7 +173,7 @@ def memory_efficiency_demo():
     # rather than storing all coalitions in memory at once
     
     start_time = time.time()
-    calculator = ShapleyValueCalculator(memory_test_function, players, num_jobs=-1)
+    calculator = ShapleyValueCalculator(memory_test_function, players, n_jobs=-1)
     
     print("Calculating Shapley values...")
     shapley_values = calculator.calculate_shapley_values()
@@ -220,7 +220,7 @@ def optimal_parallelization_demo():
     print(f"Testing different parallelization strategies with {len(players)} players:")
     print()
     
-    # Test different num_jobs values
+    # Test different n_jobs values
     job_configs = [
         (1, "Sequential"),
         (2, "2 processes"),
@@ -230,13 +230,13 @@ def optimal_parallelization_demo():
     
     results = []
     
-    for num_jobs, description in job_configs:
+    for n_jobs, description in job_configs:
         start_time = time.time()
         
         calculator = ShapleyValueCalculator(
             variable_complexity_function, 
             players, 
-            num_jobs=num_jobs
+            n_jobs=n_jobs
         )
         shapley_values = calculator.calculate_shapley_values()
         
@@ -266,7 +266,7 @@ def practical_performance_tips():
         "2. PARALLELIZATION GUIDELINES:",
         "   - Games with ≤10 players: Sequential is often faster (less overhead)",
         "   - Games with >10 players: Use parallel processing",
-        "   - CPU-bound evaluation functions: Use num_jobs=-1 (all cores)",
+        "   - CPU-bound evaluation functions: Use n_jobs=-1 (all cores)",
         "   - I/O-bound evaluation functions: Use fewer processes",
         "",
         "3. EVALUATION FUNCTION OPTIMIZATION:",

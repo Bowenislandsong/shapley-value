@@ -6,16 +6,18 @@ Provides fair allocation solutions for coalition games with multiple calculation
 and performance optimizations.
 """
 
-__version__ = '0.0.6'
+__version__ = '0.0.7'
 __author__ = 'Bowen Song'
 __license__ = 'MIT'
 
 from .calculator import ShapleyValue
 from .framework import ShapleyValueCalculator
 from .combinations import ShapleyCombinations
+from .montecarlo import MonteCarloShapleyValue
 
 __all__ = [
     'ShapleyValue',
-    'ShapleyValueCalculator', 
+    'ShapleyValueCalculator',
     'ShapleyCombinations',
+    'MonteCarloShapleyValue',
 ]

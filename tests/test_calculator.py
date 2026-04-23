@@ -120,7 +120,7 @@ class TestShapleyValueCalculator(unittest.TestCase):
             return sum(value for value in coalition) if coalition else 0
 
         self.players = [10, 20, 30]
-        self.calculator = ShapleyValueCalculator(evaluation_function, self.players, num_jobs=1)
+        self.calculator = ShapleyValueCalculator(evaluation_function, self.players, n_jobs=1)
 
     def test_calculate_shapley_values(self):
         """Test Shapley value calculation with evaluation function"""
@@ -175,7 +175,7 @@ class TestShapleyValueCalculator(unittest.TestCase):
         seq_calculator = ShapleyValueCalculator(
             self.calculator.evaluation_function, 
             self.players, 
-            num_jobs=1
+            n_jobs=1
         )
         seq_values = seq_calculator.calculate_shapley_values()
         
@@ -183,7 +183,7 @@ class TestShapleyValueCalculator(unittest.TestCase):
         par_calculator = ShapleyValueCalculator(
             self.calculator.evaluation_function, 
             self.players, 
-            num_jobs=2
+            n_jobs=2
         )
         par_values = par_calculator.calculate_shapley_values()
         
@@ -232,7 +232,7 @@ class TestEdgeCases(unittest.TestCase):
             return -sum(abs(x) for x in coalition) if coalition else 0
         
         players = [1, 2]
-        calculator = ShapleyValueCalculator(negative_evaluation, players, num_jobs=1)
+        calculator = ShapleyValueCalculator(negative_evaluation, players, n_jobs=1)
         shapley_values = calculator.calculate_shapley_values()
         
         # Should handle negative values correctly
