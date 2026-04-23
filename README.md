@@ -114,7 +114,7 @@ def profit_function(coalition):
 
 players = [100, 200, 300]
 
-calculator = ShapleyValueCalculator(profit_function, players, num_jobs=-1)
+calculator = ShapleyValueCalculator(profit_function, players, n_jobs=-1)
 shapley_values = calculator.calculate_shapley_values()
 print(shapley_values)
 
@@ -122,7 +122,7 @@ raw_data = calculator.get_raw_data()           # detailed per-coalition data
 calculator.save_raw_data('analysis.csv')       # export to CSV
 ```
 
-`num_jobs` follows the **scikit-learn convention**: `1` = sequential, `-1` = all cores, `k` = exactly k cores.
+`n_jobs` follows the **scikit-learn convention**: `1` = sequential, `-1` = all cores, `k` = exactly k cores.
 
 ### Method 3 – Monte Carlo approximation (`MonteCarloShapleyValue`)
 
@@ -207,7 +207,7 @@ class ShapleyValueCalculator:
         self,
         evaluation_function: Callable[[List[Any]], float],
         players: List[Any],
-        num_jobs: int = -1,   # sklearn-style: 1=seq, -1=all cores, k=k cores
+        n_jobs: int = 1,   # sklearn-style: 1=seq (default), -1=all cores, k=k cores
     )
     def calculate_shapley_values(self) -> Dict[Any, float]
     def get_raw_data(self) -> pd.DataFrame
@@ -346,13 +346,13 @@ If you use this package in your research or project, please cite it as:
   year = {2024},
   publisher = {GitHub},
   url = {https://github.com/Bowenislandsong/shapley-value},
-  version = {0.0.6}
+  version = {0.0.7}
 }
 ```
 
 **APA Format:**
 ```
-Song, B. (2024). Shapley Value Calculator (Version 0.0.6) [Computer software]. https://github.com/Bowenislandsong/shapley-value
+Song, B. (2024). Shapley Value Calculator (Version 0.0.7) [Computer software]. https://github.com/Bowenislandsong/shapley-value
 ```
 
 For more citation formats see [CITATION.cff](CITATION.cff).

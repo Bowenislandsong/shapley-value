@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- `ShapleyValueCalculator`: constructor parameter `num_jobs` renamed to `n_jobs`
+  for consistency with scikit-learn and `MonteCarloShapleyValue`. The instance
+  attribute is now `n_jobs` (previously `num_jobs`).
+
 ## [0.0.7] - 2026-04-23
 
 ### Added

@@ -63,7 +63,7 @@ python examples/example_ml_features.py
 **Use Case:** Large-scale exact computations and optimization
 
 Optimise performance for large exact games using `ShapleyValueCalculator`:
-- Sequential vs parallel processing comparison (`num_jobs`)
+- Sequential vs parallel processing comparison (`n_jobs`)
 - Scalability analysis across player counts
 - Memory efficiency
 
@@ -157,15 +157,15 @@ Both `ShapleyValueCalculator` and `MonteCarloShapleyValue` follow the
 
 ```python
 # Sequential (no overhead)
-ShapleyValueCalculator(f, players, num_jobs=1)
+ShapleyValueCalculator(f, players, n_jobs=1)
 MonteCarloShapleyValue(f, players, n_jobs=1)
 
 # All available CPU cores
-ShapleyValueCalculator(f, players, num_jobs=-1)
+ShapleyValueCalculator(f, players, n_jobs=-1)
 MonteCarloShapleyValue(f, players, n_jobs=-1)
 
 # Exactly 4 cores
-ShapleyValueCalculator(f, players, num_jobs=4)
+ShapleyValueCalculator(f, players, n_jobs=4)
 MonteCarloShapleyValue(f, players, n_jobs=4)
 ```
 

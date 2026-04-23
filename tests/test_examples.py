@@ -52,10 +52,11 @@ def main():
     
     examples = [
         "example_basic_coalition",
-        "example_function_evaluation", 
+        "example_function_evaluation",
         "example_business_case",
         "example_ml_features",
-        "example_parallel_processing"
+        "example_parallel_processing",
+        "example_montecarlo",
     ]
     
     results = {}

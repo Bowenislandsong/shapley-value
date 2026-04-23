@@ -9,7 +9,7 @@ class ShapleyValueCalculator:
         self,
         evaluation_function: Callable[[List[Any]], float],
         players: List[Any],
-        num_jobs: int = 1,
+        n_jobs: int = 1,
     ):
         """
         Initialize the Shapley value calculator.
@@ -18,7 +18,7 @@ class ShapleyValueCalculator:
             evaluation_function: Function that takes a coalition (list of players)
                 as input and returns its value.
             players: List of players.
-            num_jobs: Number of parallel jobs for coalition evaluation, following
+            n_jobs: Number of parallel jobs for coalition evaluation, following
                 the scikit-learn convention:
 
                 * ``1``  – sequential execution (default; no overhead)
@@ -27,13 +27,13 @@ class ShapleyValueCalculator:
 
                 Parallelism is beneficial for games with many players or
                 expensive evaluation functions.  For cheap functions or small
-                games (≤ ~8 players) ``num_jobs=1`` is usually faster because
+                games (≤ ~8 players) ``n_jobs=1`` is usually faster because
                 it avoids process-spawn overhead.
         """
         self.evaluation_function = evaluation_function
         self.players = players
         self.num_players = len(players)
-        self.num_jobs = num_jobs
+        self.n_jobs = n_jobs
 
     def calculate_shapley_values(self) -> dict:
         """
@@ -45,13 +45,13 @@ class ShapleyValueCalculator:
         """
         shapley_values: Dict[Any, float] = {player: 0.0 for player in self.players}
 
-        if self.num_jobs == 1:
+        if self.n_jobs == 1:
             results = [
                 self.process_coalition(coalition)
                 for coalition in self.generate_coalitions()
             ]
         else:
-            results = Parallel(n_jobs=self.num_jobs)(
+            results = Parallel(n_jobs=self.n_jobs)(
                 delayed(self.process_coalition)(coalition)
                 for coalition in self.generate_coalitions()
             )
@@ -146,7 +146,7 @@ if __name__ == "__main__":
         return float(sum(value for value in coalition))
 
     players = [10, 20, 30]
-    calculator = ShapleyValueCalculator(evaluation_function, players, num_jobs=-1)
+    calculator = ShapleyValueCalculator(evaluation_function, players, n_jobs=-1)
     shapley_values = calculator.calculate_shapley_values()
     print(shapley_values)
 

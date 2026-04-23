@@ -32,14 +32,15 @@ def fast_additive(coalition):
 def slow_game(coalition):
     """
     Simulates an expensive evaluation function (e.g. model inference).
-    Uses a tight Python loop to burn ~0.1 ms per call so that parallel
-    speedup is clearly visible without the test taking minutes.
+    Uses a tight Python loop so that total sequential time dominates joblib
+    process overhead; otherwise parallel can appear slower than sequential.
     """
     if not coalition:
         return 0.0
-    # ~10 000 iterations ≈ 0.05-0.15 ms on a modern CPU
+    # ~100k iterations: enough work per call that multi-core speedup is
+    # measurable on CI runners; tune here if the speedup test becomes flaky.
     acc = 0.0
-    for i in range(10_000):
+    for i in range(100_000):
         acc += i * 1e-10
     return float(sum(coalition)) + acc
 
