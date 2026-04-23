@@ -5,14 +5,30 @@ from typing import Callable, List, Any, Generator, Tuple, Dict
 from joblib import Parallel, delayed
 
 class ShapleyValueCalculator:
-    def __init__(self, evaluation_function: Callable[[List[Any]], float], players: List[Any], num_jobs: int = -1):
+    def __init__(
+        self,
+        evaluation_function: Callable[[List[Any]], float],
+        players: List[Any],
+        num_jobs: int = 1,
+    ):
         """
         Initialize the Shapley value calculator.
 
         Args:
-        - evaluation_function: Function that takes a coalition (list of players) as input and returns its value.
-        - players: List of players.
-        - num_jobs: Number of parallel jobs. Default: -1 (use all available CPUs).
+            evaluation_function: Function that takes a coalition (list of players)
+                as input and returns its value.
+            players: List of players.
+            num_jobs: Number of parallel jobs for coalition evaluation, following
+                the scikit-learn convention:
+
+                * ``1``  – sequential execution (default; no overhead)
+                * ``-1`` – use all available CPU cores
+                * ``k``  – use exactly *k* cores (k > 1)
+
+                Parallelism is beneficial for games with many players or
+                expensive evaluation functions.  For cheap functions or small
+                games (≤ ~8 players) ``num_jobs=1`` is usually faster because
+                it avoids process-spawn overhead.
         """
         self.evaluation_function = evaluation_function
         self.players = players
@@ -24,20 +40,26 @@ class ShapleyValueCalculator:
         Calculate the Shapley value for each player.
 
         Returns:
-        - A dictionary where keys are players and values are their corresponding Shapley values.
+            A dictionary where keys are players and values are their
+            corresponding Shapley values.
         """
-        # Initialize Shapley values dictionary
         shapley_values: Dict[Any, float] = {player: 0.0 for player in self.players}
-        
-        if self.num_players < 10:  # Threshold for parallel processing
-            results = [self.process_coalition(coalition) for coalition in self.generate_coalitions()]
+
+        if self.num_jobs == 1:
+            results = [
+                self.process_coalition(coalition)
+                for coalition in self.generate_coalitions()
+            ]
         else:
-            results = Parallel(n_jobs=self.num_jobs)(delayed(self.process_coalition)(coalition) for coalition in self.generate_coalitions())
-        
+            results = Parallel(n_jobs=self.num_jobs)(
+                delayed(self.process_coalition)(coalition)
+                for coalition in self.generate_coalitions()
+            )
+
         for result in results:
             for player, value in result.items():
                 shapley_values[player] += value
-        
+
         return shapley_values
 
     def generate_coalitions(self) -> Generator[Tuple[Any, ...], None, None]:
@@ -45,28 +67,34 @@ class ShapleyValueCalculator:
         Generate all possible coalitions.
 
         Yields:
-        - Coalition (tuple of players)
+            Coalition (tuple of players).
         """
         for i in range(self.num_players + 1):
             yield from itertools.combinations(self.players, i)
 
     def process_coalition(self, coalition: Tuple[Any, ...]) -> Dict[Any, float]:
         """
-        Process a single coalition.
+        Compute each player's weighted marginal contribution for one coalition.
 
         Args:
-        - coalition: Coalition to process.
+            coalition: Coalition to process.
 
         Returns:
-        - A dictionary where keys are players and values are their marginal contributions.
+            A dictionary where keys are players in the coalition and values are
+            their weighted marginal contributions.
         """
         try:
             coalition_value = self.evaluation_function(list(coalition))
             result = {}
             for player in coalition:
-                marginal_contribution = coalition_value - self.evaluation_function(list(set(coalition) - {player}))
-                result[player] = (marginal_contribution / (self.num_players * (self.num_players - 1))) * (
-                    math.comb(self.num_players - 1, len(coalition) - 1) / math.comb(self.num_players, len(coalition))
+                marginal_contribution = coalition_value - self.evaluation_function(
+                    list(set(coalition) - {player})
+                )
+                result[player] = (
+                    marginal_contribution / (self.num_players * (self.num_players - 1))
+                ) * (
+                    math.comb(self.num_players - 1, len(coalition) - 1)
+                    / math.comb(self.num_players, len(coalition))
                 )
             return result
         except Exception as e:
@@ -78,20 +106,26 @@ class ShapleyValueCalculator:
         Get the raw data used to calculate the Shapley values.
 
         Returns:
-        - A Pandas DataFrame containing the coalition, player, marginal contribution, and Shapley value.
+            A Pandas DataFrame containing the coalition, player, marginal
+            contribution, and Shapley value.
         """
         data = []
         for coalition in self.generate_coalitions():
             coalition_value = self.evaluation_function(list(coalition))
             for player in coalition:
-                marginal_contribution = coalition_value - self.evaluation_function(list(set(coalition) - {player}))
-                shapley_value = (marginal_contribution / (self.num_players * (self.num_players - 1))) * (
-                    math.comb(self.num_players - 1, len(coalition) - 1) / math.comb(self.num_players, len(coalition))
+                marginal_contribution = coalition_value - self.evaluation_function(
+                    list(set(coalition) - {player})
+                )
+                shapley_value = (
+                    marginal_contribution / (self.num_players * (self.num_players - 1))
+                ) * (
+                    math.comb(self.num_players - 1, len(coalition) - 1)
+                    / math.comb(self.num_players, len(coalition))
                 )
                 data.append({
                     'Player Coalition': str(coalition),
                     'Marginal Contribution': marginal_contribution,
-                    'Shapley Value': shapley_value
+                    'Shapley Value': shapley_value,
                 })
         return pd.DataFrame(data)
 
@@ -100,10 +134,9 @@ class ShapleyValueCalculator:
         Save the raw data to a CSV file.
 
         Args:
-        - file_path: Path to save the CSV file.
+            file_path: Path to save the CSV file.
         """
-        raw_data = self.get_raw_data()
-        raw_data.to_csv(file_path, index=False)
+        self.get_raw_data().to_csv(file_path, index=False)
 
 
 if __name__ == "__main__":
