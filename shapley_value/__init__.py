@@ -13,9 +13,11 @@ __license__ = 'MIT'
 from .calculator import ShapleyValue
 from .framework import ShapleyValueCalculator
 from .combinations import ShapleyCombinations
+from .montecarlo import MonteCarloShapleyValue
 
 __all__ = [
     'ShapleyValue',
-    'ShapleyValueCalculator', 
+    'ShapleyValueCalculator',
     'ShapleyCombinations',
+    'MonteCarloShapleyValue',
 ]
