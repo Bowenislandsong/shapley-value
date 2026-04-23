@@ -1,23 +1,25 @@
 # Publish wheel + sdist to PyPI.
 #
-# Automatic: create a GitHub Release and click **Publish release** (not Draft).
-#   Pushing a git tag alone does NOT run this — the `release: published` event
-#   only fires when a Release is published on GitHub.
+# Automatic: push a version tag (e.g. git tag v0.0.9 && git push origin v0.0.9).
+#   No GitHub "Release" page required — the tag push triggers this workflow.
 #
-# Manual: Actions → Publish to PyPI → Run workflow → set `ref` to your tag
-#   (e.g. v0.0.8) or a branch.
+# Manual: Actions → Publish to PyPI → Run workflow → set `ref` (e.g. v0.0.8).
+#
+# Optional: still create a GitHub Release for changelog/artifacts; it does not
+# run this workflow (avoids duplicate PyPI uploads when both tag + release fire).
 #
 # Requires repo secret: PYPI_API_TOKEN
 
 name: Publish to PyPI
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - "v*"
   workflow_dispatch:
     inputs:
       ref:
-        description: "Git ref to build (use your release tag, e.g. v0.0.8)"
+        description: "Git ref to build (use a release tag, e.g. v0.0.8)"
         required: true
         type: string
         default: "main"
@@ -33,7 +35,7 @@ jobs:
       - name: Checkout ref
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || github.event.release.tag_name }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || github.ref_name }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -45,10 +47,12 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install build twine
 
-      - name: Verify package version matches release tag
-        if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && startsWith(inputs.ref, 'v'))
+      - name: Verify package version matches tag
+        if: >-
+          startsWith(github.ref, 'refs/tags/v')
+          || (github.event_name == 'workflow_dispatch' && startsWith(inputs.ref, 'v'))
         env:
-          TAG_NAME: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || github.event.release.tag_name }}
+          TAG_NAME: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || github.ref_name }}
         run: |
           python << 'PY'
           import os, re, pathlib
