@@ -340,10 +340,10 @@ This project is licensed under the MIT License – see the [LICENSE](LICENSE) fi
 If you use this package in your research or project, please cite it as:
 
 ```bibtex
-@software{song2024shapley,
+@software{song2026shapley,
   author = {Song, Bowen},
   title = {Shapley Value Calculator},
-  year = {2024},
+  year = {2026},
   publisher = {GitHub},
   url = {https://github.com/Bowenislandsong/shapley-value},
   version = {0.0.8}
@@ -352,7 +352,7 @@ If you use this package in your research or project, please cite it as:
 
 **APA Format:**
 ```
-Song, B. (2024). Shapley Value Calculator (Version 0.0.8) [Computer software]. https://github.com/Bowenislandsong/shapley-value
+Song, B. (2026). Shapley Value Calculator (Version 0.0.8) [Computer software]. https://github.com/Bowenislandsong/shapley-value
 ```
 
 For more citation formats see [CITATION.cff](CITATION.cff).

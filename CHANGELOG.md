@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Documentation
+- Citations: publication year 2026 and BibTeX id `song2026shapley` in README and
+  GitHub Pages; LICENSE and site footer use a 2024–2026 copyright range.
+
 ## [0.0.8] - 2026-04-24
 
 ### Changed
