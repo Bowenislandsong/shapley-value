@@ -1,36 +1,62 @@
+# Publish wheel + sdist to PyPI when a GitHub Release is **published**
+# (draft releases do not trigger this). Requires repo secret: PYPI_API_TOKEN
+
 name: Publish to PyPI
 
 on:
   release:
     types: [published]
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to publish (leave empty to use current version)'
-        required: false
-        default: ''
+
+permissions:
+  contents: read
 
 jobs:
-  deploy:
+  publish:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.9"
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install build twine
-    
-    - name: Build package
-      run: python -m build
-    
-    - name: Publish package to PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        password: ${{ secrets.PYPI_API_TOKEN }}
+      - name: Checkout release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build tools
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install build twine
+
+      - name: Verify package version matches release tag
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: |
+          python << 'PY'
+          import os, re, pathlib
+          tag = os.environ["TAG_NAME"].lstrip("vV")
+          text = pathlib.Path("shapley_value/__init__.py").read_text()
+          m = re.search(r"__version__\s*=\s*['\"]([^'\"]+)['\"]", text)
+          if not m:
+              raise SystemExit("Could not parse __version__ in shapley_value/__init__.py")
+          ver = m.group(1)
+          if ver != tag:
+              raise SystemExit(
+                  f"Version mismatch: git tag expects {tag!r} but __version__ is {ver!r}. "
+                  "Bump the version in shapley_value/__init__.py (and changelog) before tagging."
+              )
+          print(f"OK: __version__ {ver} matches tag {os.environ['TAG_NAME']}")
+          PY
+
+      - name: Build sdist and wheel
+        run: python -m build
+
+      - name: Check distributions
+        run: python -m twine check dist/*
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
